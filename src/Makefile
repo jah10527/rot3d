@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -O3 -Wall -std=c++14 -Wno-deprecated-declarations -ftemplate-backtrace-limit=0 `pkg-config --cflags eigen3 opencv` -I./
+CFLAGS = -O3 -Wall -std=c++14 -Wno-deprecated-declarations -ftemplate-backtrace-limit=0 `pkg-config --cflags eigen3 opencv` -I./ -I../sophus/
 LIBS = `pkg-config --libs eigen3 opencv`
 OBJS = test.o
 TARGET = test

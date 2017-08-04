@@ -13,7 +13,7 @@ class SO3{
   SO3()
   {
     rv.setZero();
-    r.setZero();
+    r.setIdentity(3, 3);
   }
   
   SO3(Scalar *p)
@@ -21,7 +21,7 @@ class SO3{
     rv(0) = p[0];
     rv(1) = p[1];
     rv(2) = p[2];
-    r.setZero();
+    r.setIdentity(3, 3);
   }
   ~SO3(){}
   
@@ -42,13 +42,17 @@ class SO3{
       Scalar rx = rv(0)*itheta;
       Scalar ry = rv(1)*itheta;
       Scalar rz = rv(2)*itheta;
-
+     
       Scalar rrt[] = { rx*rx, rx*ry, rx*rz, rx*ry, ry*ry, ry*rz, rx*rz, ry*rz, rz*rz };
-      Scalar _r_x_[] = { 0, -rz, ry, rz, 0, -rx, -ry, rx, 0 };
+      
+      //RowMajor 
+      //Scalar _r_x_[] = { 0, -rz, ry, rz, 0, -rx, -ry, rx, 0 };
+
+      //ColMajor
+      Scalar _r_x_[] = { 0, rz, -ry, -rz, 0, rx, ry, -rx, 0 };
       
       for( int k = 0; k < 9; k++ )
         r(k) = c*I[k] + c1*rrt[k] + s*_r_x_[k];
-//      r = r.transpose();
     }
   }
   
