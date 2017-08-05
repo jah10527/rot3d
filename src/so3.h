@@ -34,7 +34,6 @@ class SO3{
     }
     else
     {
-      const Scalar I[] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
       Scalar c = cos(theta);
       Scalar s = sin(theta);
       Scalar c1 = 1. - c;
@@ -43,22 +42,61 @@ class SO3{
       Scalar ry = rv(1)*itheta;
       Scalar rz = rv(2)*itheta;
      
-      Scalar rrt[] = { rx*rx, rx*ry, rx*rz, rx*ry, ry*ry, ry*rz, rx*rz, ry*rz, rz*rz };
+      Scalar rrt[] = { c1*rx*rx, c1*rx*ry, c1*rx*rz, 0, c1*ry*ry, c1*ry*rz, 0, 0, c1*rz*rz };
       
-      //RowMajor 
-      //Scalar _r_x_[] = { 0, -rz, ry, rz, 0, -rx, -ry, rx, 0 };
-
-      //ColMajor
-      Scalar _r_x_[] = { 0, rz, -ry, -rz, 0, rx, ry, -rx, 0 };
-      
-      for( int k = 0; k < 9; k++ )
-        r(k) = c*I[k] + c1*rrt[k] + s*_r_x_[k];
+      r(0) = c + rrt[0];
+      r(1) = rrt[1] + s*rz;
+      r(2) = rrt[2] - s*ry;
+      r(3) = rrt[1] - s*rz;
+      r(4) = c + rrt[4];
+      r(5) = rrt[5] + s*rx;
+      r(6) = rrt[2] + s*ry;
+      r(7) = rrt[5] - s*rx;
+      r(8) = c + rrt[8];
     }
   }
   
   void mat2vec()
   {
+    Scalar rx = r(5) - r(7);
+    Scalar ry = r(6) - r(2);
+    Scalar rz = r(1) - r(3);
     
+    Scalar s = std::sqrt((rx*rx + ry*ry + rz*rz)*0.25);
+    Scalar c = (r(0) + r(4) + r(8) - 1)*0.5;
+    c = c > 1. ? 1. : c < -1. ? -1. : c;
+    Scalar theta = acos(c);
+
+    if( s < 1e-5 )
+    {
+      Scalar t;
+      if( c > 0 )
+        rx = ry = rz = 0;
+      else
+      {
+        t = (r(0) + 1)*0.5;
+        rx = std::sqrt(std::max(t,0.));
+        t = (r(4) + 1)*0.5;
+        ry = std::sqrt(std::max(t,0.))*(r(4) < 0 ? -1. : 1.);
+        t = (r(8) + 1)*0.5;
+        rz = std::sqrt(std::max(t,0.))*(r(6) < 0 ? -1. : 1.);
+        if( fabs(rx) < fabs(ry) && fabs(rx) < fabs(rz) && (r(7) > 0) != (ry*rz > 0) )
+          rz = -rz;
+        theta /= std::sqrt(rx*rx + ry*ry + rz*rz);
+        rx *= theta;
+        ry *= theta;
+        rz *= theta;
+      }
+    }
+    else
+    {
+      double vth = 1/(2*s);
+      vth *= theta;
+      rx *= vth; ry *= vth; rz *= vth;
+    }
+    rv(0) = rx;
+    rv(1) = ry;
+    rv(2) = rz;
   }
   
   Vector3<Scalar> rv;

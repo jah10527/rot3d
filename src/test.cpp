@@ -31,6 +31,12 @@ int main()
   
   std::cout << "r:\n" << so3.r << std::endl;
   std::cout << "rv:\n" << so3.rv << std::endl;
+  so3.mat2vec();
+  std::cout << "rv:\n" << so3.rv << std::endl;
+  so3.vec2mat();
+  std::cout << "r:\n" << so3.r << std::endl;
+  
+  std::cout << "0.5*(r-r.transpose()):\n" << 0.5*(so3.r-so3.r.transpose()) << std::endl;
   
   cv::Mat rv(3,1,CV_64FC1);
   rv.at<double>(0) = 5;
