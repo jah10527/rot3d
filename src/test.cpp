@@ -23,12 +23,13 @@ int main()
   for (int i=0;i<len;i++)
   {
     so3.rv(2) = 0.1*i;
-    so3.vec2mat();
+    so3.cayley();
   }
   gettimeofday(&tvEnd, NULL);
   timersub(&tvEnd, &tvStart, &tvDiff);
   printf("# %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
   
+  std::cout << "r*r.transpose():\n" << so3.r*so3.r.transpose() << std::endl;
   std::cout << "r:\n" << so3.r << std::endl;
   std::cout << "rv:\n" << so3.rv << std::endl;
   so3.mat2vec();

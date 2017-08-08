@@ -99,6 +99,70 @@ class SO3{
     rv(2) = rz;
   }
   
+  Matrix3<Scalar> rx()
+  {
+    Matrix3<Scalar> A;
+    A.setZero();
+    A(1) = rv(2);
+    A(2) = -rv(1);
+    A(3) = -rv(2);
+    A(5) = rv(0);
+    A(6) = rv(1);
+    A(7) = -rv(0);
+    return A;
+  }
+  
+  Matrix3<Scalar> rxrx()
+  {
+    Matrix3<Scalar> A;
+    A(0) = -rv(1)*rv(1)-rv(2)*rv(2);
+    A(1) = rv(0)*rv(1);
+    A(2) = rv(0)*rv(2);
+    A(3) = A(1);
+    A(4) = -rv(0)*rv(0)-rv(2)*rv(2);
+    A(5) = rv(1)*rv(2);
+    A(6) = A(2);
+    A(7) = A(5);
+    A(8) = -rv(0)*rv(0)-rv(1)*rv(1);
+    return A;
+  }
+  
+  void cayley()
+  {
+/*    Matrix3<Scalar> A = rx();
+    Matrix3<Scalar> A2 = rxrx();
+    r = 2*(A+A2)/(1-0.5*A2.trace());
+    r(0) += 1;
+    r(4) += 1;
+    r(8) += 1;
+*/
+    
+    Matrix3<Scalar> A;
+    A(0) = -rv(1)*rv(1)-rv(2)*rv(2);
+    A(1) = rv(0)*rv(1);
+    A(2) = rv(0)*rv(2);
+    A(3) = A(1) - rv(2);
+    A(4) = -rv(0)*rv(0)-rv(2)*rv(2);
+    A(5) = rv(1)*rv(2);
+    A(6) = A(2) + rv(1);
+    A(7) = A(5) - rv(0);
+    A(8) = -rv(0)*rv(0)-rv(1)*rv(1);
+    
+    A(1) += rv(2);
+    A(2) -= rv(1);
+    A(5) += rv(0);
+    
+    r = A/(.5-0.25*A.trace());
+    r(0) += 1;
+    r(4) += 1;
+    r(8) += 1;
+  }
+  
+  void cayleyInv()
+  {
+    
+  }
+  
   Vector3<Scalar> rv;
   Matrix3<Scalar> r;
   
