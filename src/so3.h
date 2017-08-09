@@ -160,7 +160,10 @@ class SO3{
   
   void cayleyInv()
   {
-    
+    Matrix3<Scalar> A = (r-r.transpose())/(1+r.trace());
+    rv(0) = A(5);
+    rv(1) = -A(2);
+    rv(2) = A(1);
   }
   
   Vector3<Scalar> rv;

@@ -19,11 +19,18 @@ int main()
   double p[3]={.5, .2, .1};
   rot3d::SO3<double> so3(p);
   
+  std::cout << "rv:\n" << so3.rv << std::endl;
+  so3.cayley();
+  so3.cayleyInv();
+  std::cout << "r:\n" << so3.r << std::endl;
+  std::cout << "rv Cayley:\n" << so3.rv << std::endl;
+  
   gettimeofday(&tvStart, NULL);
   for (int i=0;i<len;i++)
   {
     so3.rv(2) = 0.1*i;
     so3.cayley();
+    so3.cayleyInv();
   }
   gettimeofday(&tvEnd, NULL);
   timersub(&tvEnd, &tvStart, &tvDiff);
@@ -32,9 +39,9 @@ int main()
   std::cout << "r*r.transpose():\n" << so3.r*so3.r.transpose() << std::endl;
   std::cout << "r:\n" << so3.r << std::endl;
   std::cout << "rv:\n" << so3.rv << std::endl;
-  so3.mat2vec();
+  so3.cayley();
   std::cout << "rv:\n" << so3.rv << std::endl;
-  so3.vec2mat();
+  so3.cayleyInv();
   std::cout << "r:\n" << so3.r << std::endl;
   
   std::cout << "0.5*(r-r.transpose()):\n" << 0.5*(so3.r-so3.r.transpose()) << std::endl;
@@ -65,6 +72,14 @@ int main()
   timersub(&tvEnd, &tvStart, &tvDiff);
   printf("# %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
   std::cout << "exp:\n" << rot << std::endl;
+  
+  so3.r << -0.950146567583153, -6.41765854280073e-05, 0.311803617668748,
+     -6.41765854277654e-05, -0.999999917385145, -0.000401386434914383,
+      0.311803617668748, -0.000401386434914345, 0.950146484968298;
+  so3.cayleyInv();
+  std::cout << "r:\n" << so3.r << std::endl;
+  std::cout << "r.trace():\n" << so3.r.trace() << std::endl;
+  std::cout << "rv Cayley:\n" << so3.rv << std::endl;
   
   return 0;
 }
