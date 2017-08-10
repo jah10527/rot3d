@@ -4,6 +4,8 @@
 //#include <Eigen/Dense>
 #include <types.hpp>
 
+#define SCALAR_MAX 1e20
+
 namespace rot3d {
 template <class Scalar_, int Options = 0>
 class SO3{
@@ -66,7 +68,7 @@ class SO3{
     Scalar c = (r(0) + r(4) + r(8) - 1)*0.5;
     c = c > 1. ? 1. : c < -1. ? -1. : c;
     Scalar theta = acos(c);
-
+    std::cout << theta << "--" << s << std::endl;
     if( s < 1e-5 )
     {
       Scalar t;
@@ -77,7 +79,7 @@ class SO3{
         t = (r(0) + 1)*0.5;
         rx = std::sqrt(std::max(t,0.));
         t = (r(4) + 1)*0.5;
-        ry = std::sqrt(std::max(t,0.))*(r(4) < 0 ? -1. : 1.);
+        ry = std::sqrt(std::max(t,0.))*(r(3) < 0 ? -1. : 1.);
         t = (r(8) + 1)*0.5;
         rz = std::sqrt(std::max(t,0.))*(r(6) < 0 ? -1. : 1.);
         if( fabs(rx) < fabs(ry) && fabs(rx) < fabs(rz) && (r(7) > 0) != (ry*rz > 0) )
@@ -160,10 +162,31 @@ class SO3{
   
   void cayleyInv()
   {
-    Matrix3<Scalar> A = (r-r.transpose())/(1+r.trace());
-    rv(0) = A(5);
-    rv(1) = -A(2);
-    rv(2) = A(1);
+    rv(0) = r(5) - r(7);
+    rv(1) = r(6) - r(2);
+    rv(2) = r(1) - r(3);
+    Scalar t = 1 + r.trace();
+    if (t>0)
+    {
+      t = 1/t;
+      rv(0) *= t;
+      rv(1) *= t;
+      rv(2) *= t;
+    }
+    else
+    {
+      t = (r(0) + 1)*0.5;
+      Scalar rx = std::sqrt(std::max(t,0.));
+      t = (r(4) + 1)*0.5;
+      Scalar ry = std::sqrt(std::max(t,0.))*(r(3) < 0 ? -1. : 1.);
+      t = (r(8) + 1)*0.5;
+      Scalar rz = std::sqrt(std::max(t,0.))*(r(6) < 0 ? -1. : 1.);
+      if( fabs(rx) < fabs(ry) && fabs(rx) < fabs(rz) && (r(7) > 0) != (ry*rz > 0) )
+        rz = -rz;
+      rv(0) = rx*SCALAR_MAX;
+      rv(1) = ry*SCALAR_MAX;
+      rv(2) = rz*SCALAR_MAX;
+    }
   }
   
   Vector3<Scalar> rv;

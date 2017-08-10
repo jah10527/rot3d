@@ -78,8 +78,10 @@ int main()
       0.311803617668748, -0.000401386434914345, 0.950146484968298;
   so3.cayleyInv();
   std::cout << "r:\n" << so3.r << std::endl;
-  std::cout << "r.trace():\n" << so3.r.trace() << std::endl;
   std::cout << "rv Cayley:\n" << so3.rv << std::endl;
   
+  so3.cayley();
+  std::cout << "r:\n" << so3.r << std::endl;
+
   return 0;
 }
