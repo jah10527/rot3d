@@ -27,7 +27,7 @@ class SO3{
   }
   ~SO3(){}
   
-  void vec2mat()
+  void rodrigues()
   {
     Scalar theta = rv.norm();
     if( theta < 1e-6 )
@@ -58,7 +58,7 @@ class SO3{
     }
   }
   
-  void mat2vec()
+  void rodriguesInv()
   {
     Scalar rx = r(5) - r(7);
     Scalar ry = r(6) - r(2);
@@ -68,7 +68,6 @@ class SO3{
     Scalar c = (r(0) + r(4) + r(8) - 1)*0.5;
     c = c > 1. ? 1. : c < -1. ? -1. : c;
     Scalar theta = acos(c);
-    std::cout << theta << "--" << s << std::endl;
     if( s < 1e-5 )
     {
       Scalar t;
@@ -165,8 +164,8 @@ class SO3{
     rv(0) = r(5) - r(7);
     rv(1) = r(6) - r(2);
     rv(2) = r(1) - r(3);
-    Scalar t = 1 + r.trace();
-    if (t>0)
+    Scalar t = 1 + r(0) + r(4) + r(8);
+    if (t>1e-8)
     {
       t = 1/t;
       rv(0) *= t;
