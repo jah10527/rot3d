@@ -4,7 +4,7 @@
 //#include <Eigen/Dense>
 #include <types.hpp>
 
-#define SCALAR_MAX 1e20
+#define SCALAR_MAX 1e12
 
 namespace rot3d {
 template <class Scalar_, int Options = 0>
@@ -156,11 +156,6 @@ class SO3{
     r(0) = t*r(0)+1;
     r(4) = t*r(4)+1;
     r(8) = t*r(8)+1;
-    
-//    r *= t;
-//    r(0) += 1;
-//    r(4) += 1;
-//    r(8) += 1;
   }
   
   void cayleyInv()
@@ -169,7 +164,7 @@ class SO3{
     rv(1) = r(6) - r(2);
     rv(2) = r(1) - r(3);
     Scalar t = 1 + r(0) + r(4) + r(8);
-    if (t>1e-10)
+    if (t>1e-12)
     {
       t = 1/t;
       rv(0) *= t;

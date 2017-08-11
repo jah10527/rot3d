@@ -117,5 +117,7 @@ int main()
   }
   std::cout << "r Cayley absolute mean error:\n" << err/len << std::endl;
 
+  std::cout << "r*r' Cayley:\n" << so3.r*so3.r.transpose() << std::endl;
+  
   return 0;
 }
