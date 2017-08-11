@@ -11,10 +11,10 @@ Requirements
 ------------
 - opencv3.x.x (optional)
 - Eigen3
-- CMake
 
 Tested on Ubuntu mate 16.04
 
 more info
 ---------
 <https://en.wikipedia.org/wiki/Rotation_group_SO(3)>
+<https://en.wikipedia.org/wiki/Cayley_transform>

@@ -75,36 +75,47 @@ int main()
   
   so3.cayley();
   std::cout << "r:\n" << so3.r << std::endl;
+  so3.cayleyInv();
+  std::cout << "rv Cayley:\n" << so3.rv << std::endl;
   
+  double err = 0;
+  rot3d::Matrix3d _r;
   srand(time(0));
-/*  for (int i=0; i<100; i++)
+  for (int i=0; i<len; i++)
   {
     so3.rv(0) = rand()%2000000-1000000;
     so3.rv(1) = rand()%2000000-1000000;
     so3.rv(2) = rand()%2000000-1000000;
-    std::cout << "rv Cayley:\n" << so3.rv << std::endl;
+//    std::cout << "rv Cayley:\n" << so3.rv << std::endl;
     so3.cayley();
-    std::cout << "r:\n" << so3.r << std::endl;
+    _r = so3.r;
+//    std::cout << "r:\n" << so3.r << std::endl;
     so3.cayleyInv();
-    std::cout << "rv Cayley:\n" << so3.rv << std::endl;
+//    std::cout << "rv Cayley:\n" << so3.rv << std::endl << std::endl;
+    so3.cayley();
+    err += (_r-so3.r).norm();
   }
+  std::cout << "rv Cayley absolute mean error:\n" << err/len << std::endl;
   
-  for (int i=0; i<100; i++)
+  err = 0;
+  for (int i=0; i<len; i++)
   {
     so3.rv(0) = rand()%200-100;
     so3.rv(1) = rand()%200-100;
     so3.rv(2) = rand()%200-100;
     so3.rv /= so3.rv.norm();
     so3.rv *= M_PI;
-    std::cout << "rv Cayley:\n" << so3.rv << std::endl;
+//    std::cout << "rv Cayley:\n" << so3.rv << std::endl;
     so3.rodrigues();
-    std::cout << "r:\n" << so3.r << std::endl;
+//    std::cout << "r:\n" << so3.r << std::endl;
+    _r = so3.r;
     so3.cayleyInv();
-    std::cout << "rv Cayley:\n" << so3.rv << std::endl;
+//    std::cout << "rv Cayley:\n" << so3.rv << std::endl;
     so3.cayley();
-    std::cout << "r:\n" << so3.r << std::endl << std::endl;
+//    std::cout << "r:\n" << so3.r << std::endl << std::endl;
+    err += (_r-so3.r).norm();
   }
-  */
+  std::cout << "r Cayley absolute mean error:\n" << err/len << std::endl;
 
   return 0;
 }
