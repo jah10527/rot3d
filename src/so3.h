@@ -187,6 +187,32 @@ class SO3{
     }
   }
   
+  void cayleyMul(SO3 &vright, SO3 &out)
+  {
+    /*
+
+    v = (v1+v2+cross(v1,v2))/(1-v1*v2.');
+    
+    den = 1-(u*x + v*y + w*z)
+    xx=(u + x - v*z + w*y)/den
+    yy=(v + y + u*z - w*x)/den
+    zz=(w + z - u*y + v*x)/den
+    
+    */
+    Scalar x = rv(0);
+    Scalar y = rv(1);
+    Scalar z = rv(2);
+    
+    Scalar u = vright.rv(0);
+    Scalar v = vright.rv(1);
+    Scalar w = vright.rv(2);
+    
+    Scalar den = 1/(1 - u*x - v*y - w*z);
+    out.rv(0) = (u + x - v*z + w*y)*den;
+    out.rv(1) = (v + y + u*z - w*x)*den;
+    out.rv(2) = (w + z - u*y + v*x)*den;
+  }
+  
   Vector3<Scalar> rv;
   Matrix3<Scalar> r;
   

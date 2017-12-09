@@ -119,5 +119,18 @@ int main()
 
   std::cout << "r*r' Cayley:\n" << so3.r*so3.r.transpose() << std::endl;
   
+  
+  so3.rv << 1,2,3;
+  rot3d::SO3<double> out;
+  so3.cayleyMul(so3, out);
+  std::cout << "so3.rv:\n" << so3.rv << std::endl;
+  std::cout << "rv*rv Cayley:\n" << out.rv << std::endl;
+  so3.cayley();
+  out.cayley();
+  rot3d::Matrix3<double> rr = so3.r*so3.r;
+  std::cout << "out Cayley ratation:\n" << out.r << std::endl;
+  std::cout << "so3.r*so3.r :\n" << rr << std::endl;
+  
+  
   return 0;
 }
